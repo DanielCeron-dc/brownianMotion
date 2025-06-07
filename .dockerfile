@@ -1,15 +1,13 @@
-FROM python:3.10-slim
+FROM python:3.8-slim
 
-# set working directory
+# Install zstd so mise can extract .tar.zst
+RUN apt-get update && apt-get install -y --no-install-recommends zstd \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-
-# install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
-# copy your app code (but not venv)
 COPY . .
 
-# expose and run
 EXPOSE 5004
 CMD ["gunicorn", "-k", "aiohttp.GunicornWebWorker", "your_module:app", "--bind", "0.0.0.0:5004"]
