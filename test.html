@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <!-- Load Socket.IO client without integrity check -->
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+  <h3>Latest Brownian Values:</h3>
+  <pre id="output1"></pre>
+    <h3>Latest Boxplot Values:</h3>
+  <pre id="output2"></pre>
+    <h3>Latest Boxplot Values:</h3>
+  <pre id="output3"></pre>
+
+  <script>
+    const socket = io('http://localhost:5004');
+
+    socket.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    
+    socket.on('onChangeStock', (data) => {
+      document.getElementById('output1').textContent =
+        JSON.stringify(data, null, 2);
+    });
+ 
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+  </script>
+</body>
+</html>
